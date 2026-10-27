@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class 12 Study Calculator</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1020;--panel:#141c31;--panel2:#1b2741;--text:#f3f6ff;--muted:#9caaca;--accent:#7c9cff;--good:#72e0c1;--border:#2b3858}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#1b2b50 0,#0b1020 55%);font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text);min-height:100vh;padding:16px}
+.app{max-width:900px;margin:0 auto}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:8px 0 18px}.brand{display:flex;gap:12px;align-items:center}.logo{width:46px;height:46px;border-radius:15px;background:linear-gradient(135deg,#7c9cff,#8e75ff);display:grid;place-items:center;font-size:24px;font-weight:800;color:#fff}.eyebrow{font-size:11px;letter-spacing:2px;color:var(--good);font-weight:800}.top h1{font-size:21px;margin:2px 0}.pill{border:1px solid var(--border);border-radius:999px;padding:7px 11px;color:var(--muted);font-size:12px}
+.layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:14px;align-items:start}.display,.panel{background:rgba(20,28,49,.96);border:1px solid var(--border);border-radius:22px;padding:17px;box-shadow:0 18px 50px #0002}.display{margin-bottom:12px}.displayrow{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--muted);font-size:12px}.mode{background:#26385a;color:#c8d7ff;border:0;border-radius:9px;padding:7px 10px;font-weight:700}.history{min-height:20px;text-align:right;color:var(--muted);font-size:13px;overflow-wrap:anywhere;margin-top:15px}.screen{width:100%;border:0;outline:0;background:transparent;color:var(--text);font-size:clamp(29px,6vw,43px);font-weight:650;text-align:right;padding:7px 0;font-variant-numeric:tabular-nums}.answer{text-align:right;color:var(--good);font-size:16px;min-height:24px;overflow-wrap:anywhere}.keys{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}.key{min-height:48px;border:1px solid var(--border);border-radius:12px;background:var(--panel);color:var(--text);font-size:15px;font-weight:650;box-shadow:0 3px 0 #070b16;cursor:pointer}.key:active{transform:translateY(2px);box-shadow:none}.key.fn{background:var(--panel2);color:#c6d5ff}.key.op{color:#9cb4ff;background:#202f50}.key.danger{color:#ff9dba;background:#3a2037}.key.equal{background:linear-gradient(135deg,#7c9cff,#8b79ff);color:#fff;border:0;font-size:21px}.key.wide{grid-column:span 2}.panel h2{font-size:16px;margin:0 0 5px}.sub{font-size:12px;color:var(--muted);line-height:1.5;margin:0 0 13px}.tabs{display:flex;gap:6px;margin:13px 0;flex-wrap:wrap}.tab{border:1px solid var(--border);border-radius:10px;background:#111a2d;color:var(--muted);padding:8px 11px;font-weight:700;cursor:pointer}.tab.active{background:#2a3b62;color:#fff;border-color:#718dce}.formula-list{display:grid;gap:8px}.formula{border:1px solid var(--border);background:#111a2d;border-radius:13px;padding:11px}.formula strong{font-size:13px;display:block}.equation{color:#b8caff;font-size:14px;margin:6px 0;overflow-wrap:anywhere}.formula small{color:var(--muted);font-size:11px;display:block;line-height:1.45}.use{margin-top:8px;border:0;border-radius:8px;padding:7px 10px;background:#283a60;color:#eaf0ff;font-size:12px;font-weight:700;cursor:pointer}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:5px}.field input{width:100%;min-width:0;background:#0b1223;color:var(--text);border:1px solid var(--border);border-radius:9px;padding:10px;font-size:15px}.calcbtn{width:100%;padding:12px;border:0;border-radius:11px;background:linear-gradient(135deg,#7c9cff,#8b79ff);color:#fff;font-weight:800;font-size:14px;cursor:pointer}.result{background:#0d1e25;border:1px solid #28564e;color:var(--good);padding:12px;border-radius:11px;margin-top:11px;overflow-wrap:anywhere}.result small{display:block;color:#a9c9c1;margin-top:4px}.note{font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px}.foot{text-align:center;color:var(--muted);font-size:11px;margin:18px 0 4px}
+@media(max-width:700px){body{padding:11px}.layout{grid-template-columns:1fr}.top h1{font-size:18px}.pill{display:none}.panel{padding:14px}.key{min-height:46px}.fields{gap:7px}}
+</style>
+</head>
+<body>
+<main class="app">
+<header class="top"><div class="brand"><div class="logo">∑</div><div><div class="eyebrow">STUDY TOOL • CLASS XII</div><h1>Scientific Study Calculator</h1></div></div><div class="pill">Physics · Chemistry · Maths</div></header>
+<div class="layout">
+<section>
+<div class="display">
+<div class="displayrow"><span id="status">Ready to calculate</span><button class="mode" id="angleMode" type="button">DEG °</button></div>
+<div class="history" id="history">Your answer will appear here</div>
+<input id="screen" class="screen" aria-label="Expression" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="0">
+<div class="answer" id="answer" aria-live="polite"> </div>
+</div>
+<section class="keys" id="keys" aria-label="Calculator keys">
+<button class="key fn" data-insert="sin(">sin</button><button class="key fn" data-insert="cos(">cos</button><button class="key fn" data-insert="tan(">tan</button><button class="key fn" data-insert="log(">log</button><button class="key fn" data-insert="ln(">ln</button>
+<button class="key fn" data-insert="asin(">sin⁻¹</button><button class="key fn" data-insert="acos(">cos⁻¹</button><button class="key fn" data-insert="atan(">tan⁻¹</button><button class="key fn" data-insert="sqrt(">√</button><button class="key fn" data-insert="^2">x²</button>
+<button class="key fn" data-insert="(">(</button><button class="key fn" data-insert=")">)</button><button class="key fn" data-insert="pi">π</button><button class="key fn" data-insert="e">e</button><button class="key danger" data-action="back">⌫</button>
+<button class="key danger" data-action="clear">AC</button><button class="key op" data-insert="^">xʸ</button><button class="key op" data-insert="!">n!</button><button class="key op" data-insert="/">÷</button><button class="key op" data-insert="*">×</button>
+<button class="key" data-insert="7">7</button><button class="key" data-insert="8">8</button><button class="key" data-insert="9">9</button><button class="key op" data-insert="-">−</button><button class="key op" data-insert="+">+</button>
+<button class="key" data-insert="4">4</button><button class="key" data-insert="5">5</button><button class="key" data-insert="6">6</button><button class="key" data-insert="Ans">Ans</button><button class="key fn" data-insert="%">%</button>
+<button class="key" data-insert="1">1</button><button class="key" data-insert="2">2</button><button class="key" data-insert="3">3</button><button class="key" data-insert="0">0</button><button class="key" data-insert=".">.</button>
+<button class="key fn wide" data-action="copy">Copy answer</button><button class="key equal wide" data-action="equals">=</button>
+</section>
+<div class="note">Enter expressions directly or tap the keys. Functions use parentheses, e.g. sin(30). Use DEG/RAD for angle mode.</div>
+</section>
+<section class="panel">
+<h2>Class 12 Formula Hub</h2><p class="sub">Browse key formulas, or choose a calculator to substitute values and get a result.</p>
+<div class="tabs" id="tabs"><button class="tab active" data-tab="physics">⚡ Physics</button><button class="tab" data-tab="chemistry">🧪 Chemistry</button><button class="tab" data-tab="maths">∫ Maths</button></div>
+<div id="formulas" class="formula-list"></div>
+<hr style="border:0;border-top:1px solid var(--border);margin:16px 0">
+<h2 id="toolTitle">Formula calculator</h2><p class="sub" id="toolDesc">Choose a formula below to calculate with your values.</p>
+<div id="toolFields" class="fields"></div><button class="calcbtn" id="compute">Calculate formula</button><div id="toolResult" aria-live="polite"></div>
+<p class="note">Use SI units unless the formula says otherwise. This is a study aid; check assumptions, units and significant figures before using an answer in an exam.</p>
+</section>
+</div>
+<div class="foot">Made for learning · Verify important exam calculations independently</div>
+</main>
+<script>
+const data={
+physics:{
+formulas:[
+{name:"Ohm’s law",eq:"V = I × R",desc:"Voltage from current and resistance.",tool:"ohm",values:{I:2,R:5},units:"V"},
+{name:"Electric power",eq:"P = V × I",desc:"Electrical power from voltage and current.",tool:"power",values:{V:12,I:2},units:"W"},
+{name:"Coulomb’s law",eq:"F = k |q₁q₂| / r²",desc:"Magnitude of force between point charges in vacuum.",tool:"coulomb",values:{q1:0.000001,q2:0.000002,r:0.1},units:"N"},
+{name:"Wave equation",eq:"v = f × λ",desc:"Wave speed = frequency × wavelength.",tool:"wave",values:{f:50,lambda:2},units:"m/s"},
+{name:"Kinetic energy",eq:"K = ½mv²",desc:"Translational kinetic energy.",tool:"kinetic",values:{m:2,v:3},units:"J"},
+{name:"Lens / mirror formula",eq:"1/f = 1/v + 1/u",desc:"Find image distance v using sign convention: 1/v = 1/f − 1/u.",tool:"lens",values:{f:10,u:30},units:"same unit as u and f"},
+{name:"Capacitance",eq:"C = Q / V",desc:"Capacitance from charge and potential difference.",tool:"cap",values:{Q:0.000006,V:12},units:"F"},
+{name:"Ideal gas equation",eq:"PV = nRT",desc:"Find pressure P = nRT/V; use SI units.",tool:"gas",values:{n:1,T:300,V:0.0249},units:"Pa"}
+]},
+chemistry:{
+formulas:[
+{name:"Molarity",eq:"M = moles / volume (L)",desc:"Molar concentration; volume must be in litres.",tool:"molarity",values:{n:0.5,V:2},units:"mol/L"},
+{name:"Dilution",eq:"M₁V₁ = M₂V₂",desc:"For dilution with the same solute, find M₂ = M₁V₁/V₂.",tool:"dilution",values:{M1:2,V1:50,V2:200},units:"same concentration unit as M₁"},
+{name:"Ideal gas law",eq:"PV = nRT",desc:"Find pressure using kelvin and SI units.",tool:"gas",values:{n:1,T:300,V:0.0249},units:"Pa"},
+{name:"pH",eq:"pH = −log₁₀[H⁺]",desc:"For dilute aqueous solution, enter hydrogen ion concentration in mol/L.",tool:"ph",values:{H:0.001},units:"pH"},
+{name:"Nernst equation (25°C)",eq:"E = E° − (0.05916/n) log₁₀ Q",desc:"Cell potential at 298 K; Q is reaction quotient.",tool:"nernst",values:{E0:1.1,n:2,Q:10},units:"V"},
+{name:"Faraday electrolysis",eq:"m = MIt / (nF)",desc:"Mass deposited; M in g/mol, current A, time s, F ≈ 96485 C/mol.",tool:"faraday",values:{M:63.546,I:2,t:600,n:2},units:"g"}
+]},
+maths:{
+formulas:[
+{name:"Quadratic roots",eq:"x = (−b ± √(b²−4ac)) / 2a",desc:"Solve ax² + bx + c = 0.",tool:"quadratic",values:{a:1,b:-5,c:6},units:"roots"},
+{name:"Arithmetic progression",eq:"aₙ = a + (n−1)d",desc:"Find the nth term of an AP.",tool:"ap",values:{a:3,d:2,n:10},units:"term"},
+{name:"Geometric progression",eq:"aₙ = a × rⁿ⁻¹",desc:"Find the nth term of a GP.",tool:"gp",values:{a:2,r:3,n:4},units:"term"},
+{name:"Derivative: power rule",eq:"d(xⁿ)/dx = n xⁿ⁻¹",desc:"Evaluate derivative of xⁿ at x = value.",tool:"derivative",values:{n:3,x:2},units:"derivative value"},
+{name:"Definite integral: power",eq:"∫ₐᵇ xⁿ dx = (bⁿ⁺¹−aⁿ⁺¹)/(n+1)",desc:"Valid for n ≠ −1.",tool:"integral",values:{n:2,a:0,b:3},units:"integral value"},
+{name:"Distance in 3D",eq:"d = √[(x₂−x₁)²+(y₂−y₁)²+(z₂−z₁)²]",desc:"Distance between two points in three-dimensional space.",tool:"distance",values:{x1:0,y1:0,z1:0,x2:1,y2:2,z2:2},units:"units"},
+{name:"Binomial coefficient",eq:"ⁿCᵣ = n! / [r!(n−r)!]",desc:"Number of ways to choose r items from n.",tool:"comb",values:{n:5,r:2},units:"ways"},
+{name:"Mean of values",eq:"x̄ = (sum of values) / count",desc:"Enter comma-separated numbers.",tool:"mean",values:{values:"2,4,6,8"},units:"same as input"}
+]}
+};
+const $=id=>document.getElementById(id);let subject='physics',selectedTool=null,degrees=true,lastAnswer=0,justSolved=false;
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function renderFormulas(){const list=data[subject].formulas;$('formulas').innerHTML=list.map((f,i)=>`<article class="formula"><strong>${esc(f.name)}</strong><div class="equation">${esc(f.eq)}</div><small>${esc(f.desc)}</small><button class="use" data-formula="${i}">Use formula</button></article>`).join('');}
+function chooseFormula(f){selectedTool=f;$('toolTitle').textContent=f.name;$('toolDesc').textContent=f.desc;$('toolResult').innerHTML='';$('toolFields').innerHTML=Object.entries(f.values).map(([k,v])=>`<div class="field"><label for="field-${esc(k)}">${esc(({q1:'Charge q₁ (C)',q2:'Charge q₂ (C)',r:'Distance r (m)',lambda:'Wavelength λ (m)',Q:'Reaction quotient Q',H:'[H⁺] (mol/L)',n:'n (moles / exponent)',V:'Volume / voltage V',V1:'Initial volume V₁',V2:'Final volume V₂',M:'Molar mass M (g/mol)',M1:'Initial concentration M₁',I:'Current I (A)',t:'Time t (s)',E0:'Standard potential E° (V)',a:'Coefficient a / lower limit',b:'Coefficient b / upper limit',c:'Coefficient c',x:'x value',d:'Common difference d',f:'Focal length f',u:'Object distance u',m:'Mass m (kg)',v:'Speed v (m/s)',T:'Temperature T (K)',P:'Pressure P (Pa)',a:'a / lower limit',r:'Ratio r / distance r',values:'Values (comma separated)'}[k]||k))}</label><input id="field-${esc(k)}" value="${esc(v)}" ${k==='values'?'type="text"':'type="number" step="any"'}></div>`).join('');}
+function switchSubject(s){subject=s;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===s));renderFormulas();chooseFormula(data[s].formulas[0]);}
+$('tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(b)switchSubject(b.dataset.tab);});
+$('formulas').addEventListener('click',e=>{const b=e.target.closest('[data-formula]');if(b)chooseFormula(data[subject].formulas[Number(b.dataset.formula)]);});
+function val(k){const el=$('field-'+k);if(!el)throw Error('Missing input '+k);const v=Number(el.value);if(el.value.trim()===''||!Number.isFinite(v))throw Error('Enter a valid number for '+k);return v;}
+function computeFormula(){try{if(!selectedTool)throw Error('Choose a formula first');let r,unit=selectedTool.units;const v=val;switch(selectedTool.tool){
+case'ohm':r=v('I')*v('R');break;case'power':r=v('V')*v('I');break;case'coulomb':if(v('r')===0)throw Error('Distance cannot be zero');r=8.9875517923e9*Math.abs(v('q1')*v('q2'))/(v('r')**2);break;
+case'wave':r=v('f')*v('lambda');break;case'kinetic':r=.5*v('m')*v('v')**2;break;case'lens':if(v('f')===v('u'))throw Error('f and u cannot be equal for this rearrangement');r=1/(1/v('f')-1/v('u'));break;case'cap':if(v('V')===0)throw Error('Voltage cannot be zero');r=v('Q')/v('V');break;
+case'gas':if(v('V')===0)throw Error('Volume cannot be zero');r=v('n')*8.314462618*v('T')/v('V');break;case'molarity':if(v('V')===0)throw Error('Volume cannot be zero');r=v('n')/v('V');break;
+case'dilution':if(v('V2')===0)throw Error('Final volume cannot be zero');r=v('M1')*v('V1')/v('V2');break;case'ph':if(v('H')<=0)throw Error('[H⁺] must be greater than zero');r=-Math.log10(v('H'));break;
+case'nernst':if(v('n')===0||v('Q')<=0)throw Error('n must be nonzero and Q must be positive');r=v('E0')-(.05916/v('n'))*Math.log10(v('Q'));break;
+case'faraday':if(v('n')===0)throw Error('Electron number n cannot be zero');r=v('M')*v('I')*v('t')/(v('n')*96485);break;
+case'quadratic':if(v('a')===0)throw Error('a cannot be zero');{const d=v('b')**2-4*v('a')*v('c');if(d<0){const real=-v('b')/(2*v('a')),imag=Math.sqrt(-d)/(2*Math.abs(v('a')));$('toolResult').innerHTML=`<div class="result">x = ${real.toPrecision(8)} ± ${imag.toPrecision(8)}i<small>Complex roots</small></div>`;return;}r=[(-v('b')+Math.sqrt(d))/(2*v('a')),(-v('b')-Math.sqrt(d))/(2*v('a'))];unit='roots';}break;
+case'ap':r=v('a')+(v('n')-1)*v('d');break;case'gp':r=v('a')*v('r')**(v('n')-1);break;
+case'derivative':r=v('n')*v('x')**(v('n')-1);break;case'integral':if(v('n')===-1)throw Error('For n = −1, use ln|x| and handle zero bounds separately');r=(v('b')**(v('n')+1)-v('a')**(v('n')+1))/(v('n')+1);break;
+case'distance':r=Math.hypot(v('x2')-v('x1'),v('y2')-v('y1'),v('z2')-v('z1'));break;
+case'comb':{const n=v('n'),k=v('r');if(!Number.isInteger(n)||!Number.isInteger(k)||n<0||k<0||k>n||n>170)throw Error('Use whole numbers with 0 ≤ r ≤ n ≤ 170');let q=1;for(let i=1;i<=Math.min(k,n-k);i++)q=q*(n-i+1)/i;r=q;}break;
+case'mean':{const nums=$('field-values').value.split(',').map(x=>x.trim()).filter(Boolean).map(Number);if(!nums.length||nums.some(x=>!Number.isFinite(x)))throw Error('Enter values like 2, 4, 6');r=nums.reduce((a,b)=>a+b,0)/nums.length;}break;
+}const out=Array.isArray(r)?r.map(x=>Number(x.toPrecision(10))).join(' , '):Number(r.toPrecision(10));$('toolResult').innerHTML=`<div class="result"><strong>Result: ${esc(out)} ${esc(unit)}</strong><small>Formula: ${esc(selectedTool.eq)}</small></div>`;}catch(e){$('toolResult').innerHTML=`<div class="result" style="color:#ffb6c7;border-color:#6d3548">${esc(e.message)}</div>`;}}
+$('compute').addEventListener('click',computeFormula);
+$('angleMode').addEventListener('click',()=>{degrees=!degrees;$('angleMode').textContent=degrees?'DEG °':'RAD';$('status').textContent=degrees?'Angles in degrees':'Angles in radians';});
+const screen=$('screen');
+function insert(value){const start=screen.selectionStart??screen.value.length,end=screen.selectionEnd??start;if(justSolved&&(/[0-9.]|pi|e|Ans|sin|cos|tan|log|ln|sqrt|asin|acos|atan/.test(value)))screen.value='';justSolved=false;const s=screen.selectionStart??screen.value.length;screen.setRangeText(value,s,s,'end');screen.focus();}
+function clear(){screen.value='';$('answer').textContent='';$('history').textContent='Your answer will appear here';justSolved=false;}
+function back(){const s=screen.selectionStart??screen.value.length,e=screen.selectionEnd??s;if(s!==e)screen.setRangeText('',s,e,'end');else if(s>0)screen.setRangeText('',s-1,s,'end');screen.focus();justSolved=false;}
+function factorial(n){if(n<0||n>170||!Number.isInteger(n))throw Error('Factorial needs a whole number from 0 to 170');let r=1;for(let i=2;i<=n;i++)r*=i;return r;}
+function tokenize(expr){let s=expr.replace(/×/g,'*').replace(/÷/g,'/').replace(/π/g,'pi').replace(/\s+/g,'');s=s.replace(/(\d|\)|pi|e)(?=(pi|e|\d|\(|sin|cos|tan|log|ln|sqrt|asin|acos|atan))/g,'$1*');const tokens=[];let i=0;while(i<s.length){const rest=s.slice(i);let m;if((m=rest.match(/^(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?/i))){tokens.push({t:'num',v:Number(m[0])});i+=m[0].length;continue;}if((m=rest.match(/^(asin|acos|atan|sin|cos|tan|log|ln|sqrt|pi|Ans|e)/i))){tokens.push({t:'id',v:m[0]});i+=m[0].length;continue;}if('+-*/^()%!'.includes(s[i])){tokens.push({t:s[i],v:s[i]});i++;continue;}throw Error('Please check expression near "'+s[i]+'"');}return tokens;}
+function calculate(expr){const t=tokenize(expr);let p=0;const peek=()=>t[p]?.t,take=()=>t[p++];function primary(){const x=take();if(!x)throw Error('Complete the expression');if(x.t==='num')return x.v;if(x.t==='+'||x.t==='-'){const v=expression(4);return x.t==='-'?-v:v;}if(x.t==='('){const v=expression(0);if(peek()!==')')throw Error('Missing closing bracket )');take();return v;}if(x.t==='id'){const name=x.v.toLowerCase();if(name==='pi')return Math.PI;if(name==='e')return Math.E;if(name==='ans')return lastAnswer;if(peek()!=='(')throw Error(name+' needs parentheses, e.g. '+name+'(30)');take();const v=expression(0);if(peek()!==')')throw Error('Missing closing bracket )');take();const a=degrees?Math.PI/180:1;switch(name){case'sin':return Math.sin(v*a);case'cos':return Math.cos(v*a);case'tan':return Math.tan(v*a);case'asin':return (degrees?180/Math.PI:1)*Math.asin(v);case'acos':return (degrees?180/Math.PI:1)*Math.acos(v);case'atan':return (degrees?180/Math.PI:1)*Math.atan(v);case'log':if(v<=0)throw Error('log input must be positive');return Math.log10(v);case'ln':if(v<=0)throw Error('ln input must be positive');return Math.log(v);case'sqrt':if(v<0)throw Error('Square root input must be non-negative');return Math.sqrt(v);}}throw Error('Unexpected symbol');}
+function expression(min){let left=primary();while(true){const op=peek(),prec=({'+':1,'-':1,'*':2,'/':2,'^':3,'!':4,'%':4})[op]??-1;if(prec<min)break;take();if(op==='!'){left=factorial(left);continue;}if(op==='%'){left/=100;continue;}const right=expression(prec+(op==='^'?0:1));if(op==='+')left+=right;else if(op==='-')left-=right;else if(op==='*')left*=right;else if(op==='/'){if(right===0)throw Error('Cannot divide by zero');left/=right;}else if(op==='^')left=Math.pow(left,right);}return left;}
+if(!t.length)throw Error('Enter a calculation first');const result=expression(0);if(p<t.length)throw Error('Check expression around '+t[p].v);if(!Number.isFinite(result))throw Error('Result is outside calculator range');return Object.is(result,-0)?0:result;}
+function equals(){try{const expr=screen.value,result=calculate(expr);lastAnswer=result;$('history').textContent=expr+' =';$('answer').textContent=Number(result.toPrecision(12)).toString();$('status').textContent='Calculated successfully';justSolved=true;}catch(e){$('answer').textContent=e.message;$('status').textContent='Check your expression';}}
+$('keys').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.insert!==undefined){insert(b.dataset.insert);return;}if(b.dataset.action==='clear')clear();if(b.dataset.action==='back')back();if(b.dataset.action==='equals')equals();if(b.dataset.action==='copy'&&$('answer').textContent){if(navigator.clipboard?.writeText)navigator.clipboard.writeText($('answer').textContent).then(()=>$('status').textContent='Answer copied').catch(()=>$('status').textContent='Select and copy the answer');else $('status').textContent='Select and copy the answer';}});
+screen.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key==='='){e.preventDefault();equals();}if(e.key==='Escape')clear();});
+switchSubject('physics');
+</script>
+</body>
+</html>
